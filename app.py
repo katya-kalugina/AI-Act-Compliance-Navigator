@@ -1,84 +1,105 @@
 import streamlit as st
 
-st.set_page_config(page_title="AI Act Navigator", layout="centered")
+# --- CONFIG ---
+st.set_page_config(page_title="AI Act Navigator", layout="wide")
 
 st.title("EU AI Act Compliance Navigator")
 st.markdown("""
-This tool provides a deterministic logic tree for classifying AI systems according to **Regulation (EU) 2024/1689**.
-*Methodology: Computational Law approach to Art. 5, 6, and Annex III.*
+**Operationalizing Regulation (EU) 2024/1689**  
+*A deterministic logic tree for AI system classification, risk assessment, and transparency obligations.*
 """)
 
-# --- NAVIGATION ---
-step = st.sidebar.radio("Compliance Steps", ["1. Prohibited Practices", "2. High-Risk Classification", "3. Obligations Summary"])
+# --- SIDEBAR NAVIGATION ---
+st.sidebar.header("Regulatory Modules")
+module = st.sidebar.radio("Navigate through the Act:", 
+    ["1. Prohibited Practices (Art 5)", 
+     "2. High-Risk Classification (Art 6)", 
+     "3. Transparency Obligations (Art 50)",
+     "4. GPAI & Systemic Risk (Art 51-55)"])
 
-# --- STEP 1: PROHIBITED PRACTICES ---
-if step == "1. Prohibited Practices":
+# --- MODULE 1: PROHIBITED PRACTICES ---
+if module == "1. Prohibited Practices (Art 5)":
     st.header("Step 1: Prohibited AI Practices (Article 5)")
-    st.info("If any of the following apply, the system is prohibited in the EU.")
+    st.info("AI systems categorized here are strictly banned from the European Union market.")
     
-    p1 = st.checkbox("Cognitive behavioral manipulation leading to physical/psychological harm")
-    p2 = st.checkbox("Untargeted scraping of facial images from the internet/CCTV")
-    p3 = st.checkbox("Social scoring based on social behavior or personality traits")
-    p4 = st.checkbox("Biometric categorization based on sensitive traits (race, religion, etc.)")
+    with st.expander("Identify Prohibited Criteria"):
+        p1 = st.checkbox("Cognitive behavioral manipulation or deceptive techniques intended to distort behavior")
+        p2 = st.checkbox("Exploitation of vulnerabilities (age, disability, or specific socio-economic situations)")
+        p3 = st.checkbox("Social scoring by public or private actors leading to unfavorable treatment")
+        p4 = st.checkbox("Real-time remote biometric identification in public spaces for law enforcement (with narrow exceptions)")
+        p5 = st.checkbox("Untargeted scraping of facial images from CCTV or the internet for facial recognition databases")
+        p6 = st.checkbox("Emotion recognition in the workplace or educational institutions (except for safety/medical reasons)")
 
-    if any([p1, p2, p3, p4]):
-        st.error("🚨 RESULT: PROHIBITED. Under Article 5, this AI system cannot be placed on the market.")
+    if any([p1, p2, p3, p4, p5, p6]):
+        st.error("🚨 DETERMINATION: PROHIBITED PRACTICE. Under Article 5, this AI system cannot be placed on the market or used.")
     else:
-        st.success("✅ No prohibited practices detected. Proceed to Step 2.")
+        st.success("✅ No prohibited practices identified. Proceed to Risk Classification.")
 
-# --- STEP 2: HIGH-RISK AI ---
-elif step == "2. High-Risk Classification":
-    st.header("Step 2: Risk Classification (Article 6)")
+# --- MODULE 2: HIGH-RISK CLASSIFICATION ---
+elif module == "2. High-Risk Classification (Art 6)":
+    st.header("Step 2: Risk Classification Logic (Article 6)")
     
-    st.subheader("Criteria A: Regulated Products (Art 6.1)")
-    is_annex_i = st.toggle("Is the AI a safety component of a product covered by Annex I (e.g., Medical Devices, Toys, Machinery)?")
+    col1, col2 = st.columns(2)
     
+    with col1:
+        st.subheader("Category A: Annex I Products")
+        is_annex_i = st.toggle("Is the AI a safety component or the product itself covered by Annex I legislation (e.g., Medical Devices, Machinery, Aviation)?")
+    
+    with col2:
+        st.subheader("Category B: Annex III Domains")
+        domain = st.selectbox("Select the domain of application:", 
+            ["None / Other", "Biometrics", "Critical Infrastructure", "Education", "Employment", "Essential Private/Public Services", "Law Enforcement", "Migration", "Justice"])
+
+    # High-Risk Logic
     if is_annex_i:
-        st.warning("⚠️ RESULT: HIGH-RISK AI. System falls under Article 6(1).")
-    else:
-        st.subheader("Criteria B: Specific Domains (Annex III)")
-        domain = st.selectbox("Does the AI system operate in any of these areas?", [
-            "None of the below",
-            "Biometrics (Identification/Categorization)",
-            "Critical Infrastructure (Water, Gas, Electricity)",
-            "Education and Vocational Training",
-            "Employment and HR Management",
-            "Access to Essential Private/Public Services (Credit, Emergency, etc.)",
-            "Law Enforcement",
-            "Migration, Asylum, and Border Control",
-            "Administration of Justice and Democratic Processes"
-        ])
+        st.warning("⚠️ DETERMINATION: HIGH-RISK (Art 6.1). Subject to comprehensive Title III compliance and Article 17 requirements.")
+    elif domain != "None / Other":
+        st.info(f"System identified in Annex III domain: {domain}")
         
-        if domain != "None of the below":
-            st.info(f"System identified in Annex III domain: {domain}")
-            
-            # --- ARTICLE 6(3) FILTER: THE "AUXILIARY TASK" EXCEPTION ---
-            st.subheader("The 'Significant Risk' Filter (Article 6(3))")
-            st.markdown("Even if listed in Annex III, a system is NOT high-risk if it does not pose a significant risk to rights.")
-            
-            e1 = st.checkbox("The system performs a narrow procedural task")
-            e2 = st.checkbox("The system improves the result of a previously completed human activity")
-            e3 = st.checkbox("The system is purely preparatory to an assessment")
-            
-            if any([e1, e2, e3]):
-                st.success("✅ RESULT: NON-HIGH-RISK (Art 6.3 Exception). Only general transparency rules apply.")
-            else:
-                st.warning("⚠️ RESULT: HIGH-RISK AI. Must comply with Title III requirements.")
+        # --- ARTICLE 6(3) DEROGATION FILTER ---
+        st.subheader("Significant Risk Filter (Article 6(3))")
+        st.markdown("*New in Regulation 2024/1689:* An Annex III system is NOT high-risk if it performs only auxiliary tasks.")
+        
+        is_auxiliary = st.checkbox("Does the system perform a narrow procedural/preparatory task with no material influence on the human decision?")
+        
+        if is_auxiliary:
+            st.success("✅ DETERMINATION: NON-HIGH RISK (Art 6.3 Exception applies). Note: Specific transparency rules may still apply.")
         else:
-            st.success("✅ RESULT: MINIMAL/LOW RISK. General transparency and voluntary codes of conduct apply.")
+            st.warning("⚠️ DETERMINATION: HIGH-RISK (Art 6.2). Compliance with Article 17 (Quality Management System) and human oversight is mandatory.")
+    else:
+        st.success("✅ DETERMINATION: MINIMAL/LOW RISK. Encouraged to follow voluntary codes of conduct.")
 
-# --- STEP 3: OBLIGATIONS ---
+# --- MODULE 3: TRANSPARENCY (ART 50) ---
+elif module == "3. Transparency Obligations (Art 50)":
+    st.header("Step 3: Specific Transparency Obligations (Article 50)")
+    st.write("These rules apply regardless of risk level when AI interacts with people or generates content.")
+
+    t1 = st.checkbox("Does the AI system interact directly with natural persons (e.g., Chatbots)?")
+    t2 = st.checkbox("Is it an emotion recognition or biometric categorization system?")
+    t3 = st.checkbox("Does it generate or manipulate 'Deepfakes' (image, audio, or video)?")
+    t4 = st.checkbox("Does it generate text published for informining the public on matters of public interest?")
+
+    if any([t1, t2, t3, t4]):
+        st.warning("📢 MANDATORY DISCLOSURE: Providers/Deployers must inform users that they are interacting with AI (Article 50(1)-(4)).")
+    else:
+        st.success("No specific transparency obligations under Article 50 identified for this configuration.")
+
+# --- MODULE 4: GPAI & SYSTEMIC RISK ---
 else:
-    st.header("Step 3: Key Obligations (Article 17)")
-    st.markdown("""
-    If your system is classified as **High-Risk**, the provider must implement:
-    1. **Risk Management System:** A continuous iterative process throughout the lifecycle.
-    2. **Data Governance:** Training, validation, and testing datasets must be relevant and representative.
-    3. **Technical Documentation:** Comprehensive "Model Cards" and system architecture descriptions.
-    4. **Human Oversight:** Design that allows for meaningful human intervention (Human-in-the-loop).
-    5. **Accuracy & Robustness:** Guaranteed levels of performance and cybersecurity.
-    """)
-    st.download_button("Download Compliance Checklist (Draft)", "1. Risk Mgmt\n2. Data Gov\n3. Technical Doc", file_name="check-list.txt")
+    st.header("Step 4: General-Purpose AI (GPAI) Models (Art 51-55)")
+    
+    is_gpai = st.toggle("Is the system a General-Purpose AI model (e.g., a foundation model like GPT-4 or Llama)?")
+    
+    if is_gpai:
+        st.subheader("Systemic Risk Assessment (Article 51)")
+        compute_power = st.number_input("Total cumulative compute used for training (expressed in FLOPs):", value=0.0, format="%.2e")
+        
+        if compute_power > 1e25:
+            st.error("🚨 CLASSIFICATION: GPAI WITH SYSTEMIC RISK. Subject to Article 53-55: adversarial testing, model evaluations, and systemic risk mitigation.")
+        else:
+            st.warning("⚠️ CLASSIFICATION: GENERAL GPAI MODEL. Subject to technical documentation, transparency towards downstream providers, and copyright law compliance.")
+    else:
+        st.info("System is not classified as a General-Purpose AI model.")
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Tool developed by Ekaterina Kalugina based on Regulation (EU) 2024/1689 official text.")
+st.sidebar.caption("© 2026 Ekaterina Kalugina. Source: Official Text of the EU AI Act.")
