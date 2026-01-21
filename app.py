@@ -116,54 +116,43 @@ elif module == "3. Transparency Obligations (Art 50)":
         if t4 or t5:
             st.warning("📢 **Deployer's Obligation:** Disclose that content is artificially generated/manipulated.")
 
-# --- MODULE 4: GPAI DEFINITION & SYSTEMIC RISK (Art 51-55) ---
-else:
+# --- MODULE 4: GPAI MODELS (Art 51-55) - ИСПРАВЛЕННЫЙ И ДОРАБОТАННЫЙ ---
+elif module == "4. GPAI Models (Art 51-55)":
     st.header("Module 4: General-Purpose AI (GPAI) Models")
-    st.markdown("This section applies specifically to the underlying AI **models**, as clarified in the Feb 2025 Commission Guidelines.")
+    st.markdown("Based on Art 3(63) and February 2025 Commission Guidelines.")
 
-    # --- PART 1: DEFINITION CHECK (Art 3(63) & Guidelines) ---
-    st.subheader("1. General-Purpose Definition Check")
-    st.write("Determine if the model meets the criteria of 'generality':")
+    st.subheader("1. Generality Assessment (Definition Check)")
+    g1 = st.checkbox("Does the model perform a wide range of distinct tasks (text, code, reasoning)?")
+    g2 = st.checkbox("Can it be integrated into various downstream systems?")
     
-    g1 = st.checkbox("Does the model display significant generality and competence in performing a wide range of distinct tasks?")
-    g2 = st.checkbox("Can the model be integrated into a variety of downstream AI systems?")
-    exclusion = st.checkbox("Is this model used strictly for R&D/Prototyping before being placed on the market?")
-
-    if g1 and g2 and not exclusion:
+    if g1 and g2:
         st.success("🎯 CLASSIFICATION: THIS IS A GPAI MODEL.")
         
         st.divider()
-        # --- PART 2: SYSTEMIC RISK ASSESSMENT (Art 51) ---
-        st.subheader("2. Systemic Risk Assessment (Article 51)")
-        st.write("A GPAI model poses a **systemic risk** if it meets any of the following:")
-        
-        c1 = st.checkbox("It has high-impact capabilities (evaluated through technical methodologies).")
-        c2 = st.checkbox("The total cumulative compute used for training is greater than 10^25 FLOPs.")
-        c3 = st.checkbox("The Commission has designated it as systemic (Art 51.2).")
+        st.subheader("2. Systemic Risk Classification (Art 51)")
+        compute = st.number_input("Cumulative training compute (FLOPs):", value=0.0, format="%.2e")
+        high_impact = st.checkbox("Model has high-impact capabilities (Commission designation)")
 
-        if any([c1, c2, c3]):
-            st.error("🚨 CLASSIFICATION: GPAI MODEL WITH SYSTEMIC RISK")
-            st.subheader("Additional Obligations (Article 55):")
+        if compute >= 1e25 or high_impact:
+            st.error("🚨 CLASSIFICATION: GPAI WITH SYSTEMIC RISK")
             st.markdown("""
-            - **Model Evaluation:** Adversarial testing and 'Red Teaming'.
-            - **Risk Mitigation:** Assessment and mitigation of systemic risks at the Union level.
-            - **Incident Reporting:** Mandatory reporting of serious incidents to the AI Office.
-            - **Cybersecurity:** High-level protection for the model and infrastructure.
+            **Mandatory Obligations (Art 55):**
+            - Adversarial testing (Red Teaming).
+            - Systemic risk assessment & mitigation.
+            - Incident reporting to the AI Office.
+            - High-level cybersecurity protection.
             """)
         else:
-            st.warning("⚠️ CLASSIFICATION: GENERAL GPAI MODEL (Non-Systemic)")
-            st.subheader("Core Obligations (Article 53):")
+            st.warning("⚠️ CLASSIFICATION: GENERAL GPAI (Non-Systemic)")
             st.markdown("""
-            - **Technical Documentation:** For the AI Office and national authorities.
-            - **Downstream Transparency:** Information for providers who integrate the model.
-            - **Copyright Policy:** Compliance with EU copyright laws.
-            - **Training Data Summary:** Detailed summary of the content used for training.
+            **Core Obligations (Art 53):**
+            - Technical documentation for authorities.
+            - Documentation for downstream providers.
+            - Copyright law compliance policy.
+            - Detailed summary of training data content.
             """)
-    elif exclusion:
-        st.info("The model is excluded from the AI Act scope as it is restricted to R&D/Prototyping (Art 2).")
     else:
-        st.info("The criteria for 'generality' are not met. This is likely a specific/narrow AI model.")
+        st.info("Identify 'generality' criteria to see applicable GPAI obligations.")
 
-# --- FOOTER ---
 st.sidebar.markdown("---")
-st.sidebar.caption("© 2026 Ekaterina Kalugina. Based on the official text of Regulation (EU) 2024/1689.")
+st.sidebar.caption("© 2026 Ekaterina Kalugina. Precise Regulatory Implementation.")
