@@ -20,4 +20,3 @@ In the field of **Responsible Computing**, abstract legal requirements must be t
 - **Architecture:** Rule-based deterministic logic engine.
 - **Framework:** Python / Streamlit.
 - **Source of Truth:** Official text of the European AI Office (Regulation 2024/1689).
-- 
