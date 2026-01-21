@@ -38,39 +38,61 @@ if module == "1. Prohibited Practices (Art 5)":
     else:
         st.success("✅ No prohibited practices identified. Proceed to Risk Classification.")
 
-# --- MODULE 2: HIGH-RISK CLASSIFICATION (Art 6) ---
+# --- MODULE 2: HIGH-RISK (Art 6) --
 elif module == "2. High-Risk Classification (Art 6)":
     st.header("Module 2: Risk Classification Logic (Article 6)")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Category A: Annex I Products")
-        is_annex_i = st.toggle("Is the AI a safety component or the product itself covered by Annex I legislation (e.g., Medical Devices, Aviation, Machinery)?")
+    st.subheader("1. Criteria for Regulated Products (Article 6(1))")
+    st.write("A system is high-risk if BOTH conditions are met:")
+    c1_a = st.checkbox("The AI is a safety component or is itself a product covered by Annex I (e.g., Medical Devices, Machinery, Lifts).")
+    c1_b = st.checkbox("The product is required to undergo a **third-party conformity assessment** under Annex I legislation.")
     
-    with col2:
-        st.subheader("Category B: Annex III Domains")
-        domain = st.selectbox("Select the domain of application:", 
-            ["None / Other", "Biometrics", "Critical Infrastructure", "Education", "Employment", "Essential Private/Public Services", "Law Enforcement", "Migration", "Justice"])
+    is_high_risk_6_1 = c1_a and c1_b
 
-    # High-Risk Logic
-    if is_annex_i:
-        st.warning("⚠️ DETERMINATION: HIGH-RISK (Art 6.1). Subject to comprehensive Title III compliance and Article 17 requirements.")
-    elif domain != "None / Other":
+    st.divider()
+    st.subheader("2. Criteria for Specific Domains (Article 6(2) & Annex III)")
+    domain = st.selectbox("Does the system operate in an Annex III domain?", [
+        "None / Other", "Biometrics", "Critical Infrastructure", "Education", "Employment", 
+        "Access to Services", "Law Enforcement", "Migration", "Justice"
+    ])
+    
+    is_annex_iii = domain != "None / Other"
+
+    # --- THE LOGIC ENGINE FOR ARTICLE 6 ---
+    if is_high_risk_6_1:
+        st.warning("⚠️ DETERMINATION: HIGH-RISK AI (under Art 6(1)).")
+        st.info("Your system is a safety component of a regulated product requiring third-party assessment.")
+        
+    elif is_annex_iii:
         st.info(f"System identified in Annex III domain: {domain}")
         
-        # --- ARTICLE 6(3) DEROGATION FILTER ---
+        # ARTICLE 6(3) DEROGATION & PROFILING OVERRIDE
         st.subheader("Significant Risk Filter (Article 6(3))")
-        st.markdown("*Filter criteria:* An Annex III system is NOT high-risk if it performs only auxiliary tasks.")
         
-        is_auxiliary = st.checkbox("Does the system perform a narrow procedural task with no material influence on the final decision?")
-        is_improvement = st.checkbox("Does the system only improve the result of a previously completed human activity?")
+        is_profiling = st.toggle("Does the AI system perform **Profiling** of natural persons?", 
+                                help="Profiling always leads to High-Risk classification regardless of other exceptions.")
         
-        if is_auxiliary or is_improvement:
-            st.success("✅ DETERMINATION: NON-HIGH RISK (Art 6.3 Exception applies). Note: Specific transparency rules may still apply.")
+        if is_profiling:
+            st.warning("⚠️ DETERMINATION: HIGH-RISK AI (Art 6.3 override).")
+            st.error("Profiling of natural persons in Annex III domains is ALWAYS high-risk.")
         else:
-            st.warning("⚠️ DETERMINATION: HIGH-RISK (Art 6.2). Compliance with Article 17 (Quality Management System) and human oversight is mandatory.")
+            st.write("Check if any 'Non-Significant Risk' exceptions apply:")
+            e1 = st.checkbox("Narrow procedural task")
+            e2 = st.checkbox("Improvement of a previous human activity")
+            e3 = st.checkbox("Detection of decision patterns (preparatory/auxiliary)")
+            e4 = st.checkbox("Purely preparatory task to an assessment")
+
+            if any([e1, e2, e3, e4]):
+                st.success("✅ DETERMINATION: NON-HIGH RISK (Art 6.3 Exception applies).")
+                st.markdown("""
+                **Mandatory Actions (Art 6.4):**
+                - Document the assessment before placing on the market.
+                - Register the system in the EU database (Art 49.2).
+                """)
+            else:
+                st.warning("⚠️ DETERMINATION: HIGH-RISK AI (Art 6.2). Compliance with Title III required.")
     else:
-        st.success("✅ DETERMINATION: MINIMAL/LOW RISK. Encouraged to follow voluntary codes of conduct.")
+        st.success("✅ DETERMINATION: LOW/MINIMAL RISK (unless Art 50 applies).")
 
 # --- MODULE 3: TRANSPARENCY (ARTICLE 50) - FINAL TEXT COMPLIANCE ---
 elif module == "3. Transparency Obligations (Art 50)":
