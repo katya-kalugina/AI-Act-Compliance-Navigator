@@ -9,7 +9,7 @@ This tool converts the complex regulatory text of the EU AI Act into a functiona
 
 ### Key Regulatory Modules:
 - **Article 5 (Prohibited Practices):** Identification of banned AI applications.
-- **Article 6 (High-Risk AI):** Classification logic for Annex I and Annex III systems, including the **Article 6(3) Significant Risk Filter**.
+- **Article 6 (High-Risk AI):** Classification logic for Annex I and Annex III systems, including the Article 6(3) Significant Risk Filter.
 - **Article 50 (Transparency):** Assessment of disclosure obligations for chatbots, deepfakes, and biometric systems.
 - **Articles 51-55 (GPAI Models):** Classification of General-Purpose AI and assessment of systemic risk based on compute thresholds ($10^{25}$ FLOPs).
 
