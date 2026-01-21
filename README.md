@@ -1,6 +1,6 @@
 # EU AI Act Compliance Navigator
 
-An algorithmic decision-support tool designed to operationalize the legal criteria of the **EU AI Act (Regulation 2024/1689)**.
+An algorithmic decision-support tool designed to operationalize the legal criteria of the EU AI Act (Regulation 2024/1689).
 
 [**📊 Run Interactive Navigator**](https://ai-act-compliance-navigator-g7js7fwafmpct3dwk4qtjv.streamlit.app/)
 
