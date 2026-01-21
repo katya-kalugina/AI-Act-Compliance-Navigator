@@ -22,21 +22,53 @@ module = st.sidebar.radio("Navigate through the Act:",
 # --- MODULE 1: PROHIBITED PRACTICES (Art 5) ---
 if module == "1. Prohibited Practices (Art 5)":
     st.header("Module 1: Prohibited AI Practices (Article 5)")
-    st.info("AI systems categorized here are strictly banned from the European Union market.")
-    
-    with st.container():
-        st.subheader("Assessment Criteria")
-        p1 = st.checkbox("Cognitive behavioral manipulation or deceptive techniques intended to distort behavior")
-        p2 = st.checkbox("Exploitation of vulnerabilities (age, disability, or specific socio-economic situations)")
-        p3 = st.checkbox("Social scoring by public or private actors leading to unfavorable treatment")
-        p4 = st.checkbox("Real-time remote biometric identification in public spaces for law enforcement (with narrow exceptions)")
-        p5 = st.checkbox("Untargeted scraping of facial images from CCTV or the internet for facial recognition databases")
-        p6 = st.checkbox("Emotion recognition in the workplace or educational institutions (except for safety/medical reasons)")
+    st.info("AI systems falling under these categories are banned from the EU market since February 2, 2025.")
 
-    if any([p1, p2, p3, p4, p5, p6]):
-        st.error("🚨 DETERMINATION: PROHIBITED PRACTICE. Under Article 5, this AI system cannot be placed on the market or used in the EU.")
+    with st.container():
+        st.subheader("Critical Prohibitions Check")
+        
+        # 1(a) & 1(b): Manipulative & Vulnerability exploitation
+        p_manipulate = st.checkbox("System uses subliminal, manipulative, or deceptive techniques to distort behavior and cause significant harm (Art 5.1.a)")
+        p_vulnerable = st.checkbox("System exploits vulnerabilities (age, disability, socio-economic situation) to distort behavior and cause significant harm (Art 5.1.b)")
+        
+        # 1(c): Social Scoring
+        p_scoring = st.checkbox("System performs social scoring (classification based on social behavior or personality traits leading to unfavorable treatment) (Art 5.1.c)")
+        
+        # 1(d): Individual Predictive Policing
+        st.write("---")
+        p_predictive = st.checkbox("System makes risk assessments to predict the risk of a person committing criminal offences based solely on profiling or personality traits (Art 5.1.d)")
+        if p_predictive:
+            st.warning("⚠️ **Exception check:** Does the system ONLY support human assessment based on objective, verifiable facts already linked to a criminal activity?")
+            p_predictive_exception = st.radio("Is this exception met?", ["No", "Yes"])
+            if p_predictive_exception == "Yes": p_predictive = False # Clear prohibition if exception applies
+        
+        # 1(e): Facial Recognition Databases
+        p_scraping = st.checkbox("System creates/expands facial recognition databases via untargeted scraping of facial images from the internet or CCTV (Art 5.1.e)")
+        
+        # 1(f): Emotion Recognition
+        st.write("---")
+        p_emotion = st.checkbox("System infers emotions of natural persons in workplace or education settings (Art 5.1.f)")
+        if p_emotion:
+            st.warning("⚠️ **Exception check:** Is the system intended for medical or safety reasons?")
+            p_emotion_exception = st.radio("Is medical/safety intent present?", ["No", "Yes"])
+            if p_emotion_exception == "Yes": p_emotion = False
+
+        # 1(g): Biometric Categorization
+        p_bio_cat = st.checkbox("System categorizes persons based on biometric data to deduce sensitive traits (race, religion, sexual orientation, etc.) (Art 5.1.g)")
+        
+        # 1(h): Real-time RBI for Law Enforcement
+        st.write("---")
+        p_rbi = st.checkbox("System uses 'real-time' remote biometric identification in publicly accessible spaces for law enforcement (Art 5.1.h)")
+        if p_rbi:
+            st.warning("⚠️ **Strict Necessity Check (Exceptions):** Is the use strictly necessary for: (i) victims of trafficking/missing persons, (ii) imminent threat to life/terrorist attack, or (iii) locating suspects of specific serious crimes?")
+            p_rbi_exception = st.radio("Is one of these narrow objectives met and authorized?", ["No", "Yes"])
+            if p_rbi_exception == "Yes": p_rbi = False
+
+    # FINAL VERDICT FOR MODULE 1
+    if any([p_manipulate, p_vulnerable, p_scoring, p_predictive, p_scraping, p_emotion, p_bio_cat, p_rbi]):
+        st.error("🚨 DETERMINATION: PROHIBITED PRACTICE identified. Placement on the market or use is forbidden under Article 5.")
     else:
-        st.success("✅ No prohibited practices identified. Proceed to Risk Classification.")
+        st.success("✅ No prohibited practices identified under the current configuration.")
 
 # --- MODULE 2: HIGH-RISK (Art 6) --
 elif module == "2. High-Risk Classification (Art 6)":
@@ -94,7 +126,7 @@ elif module == "2. High-Risk Classification (Art 6)":
     else:
         st.success("✅ DETERMINATION: LOW/MINIMAL RISK (unless Art 50 applies).")
 
-# --- MODULE 3: TRANSPARENCY (ARTICLE 50) - FINAL TEXT COMPLIANCE ---
+# --- MODULE 3: TRANSPARENCY (ARTICLE 50) - 
 elif module == "3. Transparency Obligations (Art 50)":
     st.header("Module 3: Transparency for Specific AI Systems")
     st.write("This module identifies obligations based on the final text of Art. 50 (1)-(4).")
@@ -138,7 +170,7 @@ elif module == "3. Transparency Obligations (Art 50)":
         if t4 or t5:
             st.warning("📢 **Deployer's Obligation:** Disclose that content is artificially generated/manipulated.")
 
-# --- MODULE 4: GPAI MODELS (Art 51-55) - ИСПРАВЛЕННЫЙ И ДОРАБОТАННЫЙ ---
+# --- MODULE 4: GPAI MODELS (Art 51-55) - 
 elif module == "4. GPAI Models (Art 51-55)":
     st.header("Module 4: General-Purpose AI (GPAI) Models")
     st.markdown("Based on Art 3(63) and February 2025 Commission Guidelines.")
