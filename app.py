@@ -6,9 +6,8 @@ st.set_page_config(page_title="AI System Classifier", layout="wide")
 # Применяем строгий стиль оформления
 st.title("AI System Classifier")
 st.markdown("""
-**Operationalizing Regulation (EU) 2024/1689**  
-*A deterministic logic framework for AI classification, risk assessment, and transparency obligations. 
-Updated with Feb 2025 Commission Guidelines on the definition of AI and GPAI.*
+**Operationalizing EU AI Act / Regulation (EU) 2024/1689**  
+*A deterministic logic framework for AI classification, risk assessment, and transparency obligations.*
 """)
 
 # --- SIDEBAR NAVIGATION ---
