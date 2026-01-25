@@ -1,10 +1,10 @@
 import streamlit as st
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="AI Act Navigator", layout="wide")
+st.set_page_config(page_title="AI System Classifier", layout="wide")
 
 # Применяем строгий стиль оформления
-st.title("EU AI Act Compliance Navigator")
+st.title("AI System Classifier")
 st.markdown("""
 **Operationalizing Regulation (EU) 2024/1689**  
 *A deterministic logic framework for AI classification, risk assessment, and transparency obligations. 
