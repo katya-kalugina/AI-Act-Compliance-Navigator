@@ -1,8 +1,8 @@
-# EU AI Act Compliance Navigator
+# AI System Classifier
 
-An algorithmic decision-support tool designed to operationalize the legal criteria of the EU AI Act (Regulation 2024/1689).
+An algorithmic decision-support tool designed to classify AI systems in accordance with the the EU AI Act (Regulation 2024/1689).
 
-[**📊 Run Interactive Navigator**](https://ai-act-compliance-navigator-g7js7fwafmpct3dwk4qtjv.streamlit.app/)
+[**📊 Run AI System Classifier **](https://ai-system-classifier-ywunrhw4gfav2mmzxx5jry.streamlit.app/)
 
 ## Project Overview
 This tool converts the complex regulatory text of the EU AI Act into a functional logic tree. It enables users to determine the risk level of AI systems and identify specific mandatory obligations through a deterministic "Legal Engineering" approach.
