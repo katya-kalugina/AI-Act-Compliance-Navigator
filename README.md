@@ -8,8 +8,8 @@ An algorithmic decision-support tool designed to classify AI systems in accordan
 This tool converts the complex regulatory text of the EU AI Act into a functional logic tree. It enables users to determine the risk level of AI systems and identify specific mandatory obligations through a deterministic "Legal Engineering" approach.
 
 ### Key Regulatory Modules:
-- Article 5 (prohibited Practices): identification of banned AI applications.
-- Article 6 (high-Risk AI): classification logic for Annex I and Annex III systems, including the Article 6(3).
+- Article 5 (prohibited practices): identification of banned AI applications.
+- Article 6 (high-risk AI): classification logic for Annex I and Annex III systems, including the Article 6(3).
 - Article 50 (transparency): assessment of disclosure obligations for chatbots, GenAI, deepfakes, and biometric systems.
 - Articles 51-55 (GPAI models): classification of General-Purpose AI and assessment of systemic risk.
 
